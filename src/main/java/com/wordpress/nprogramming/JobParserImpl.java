@@ -13,13 +13,18 @@ public final class JobParserImpl implements JobParser {
 
     @Override
     public List<Job> parse(String input) {
-        String newJil = input.replaceFirst("job_type:", "\njob_type:");
+        String newJil = input.replaceAll("job_type:", "\njob_type:");
 
         final String[] jils = newJil.split("(?=insert_job:)");
 
         List<Job> jobs = new ArrayList<>();
-        for (String jil : jils)
-            jobs.add(parseJob(jil));
+        for (String jil : jils) {
+            final Job job = parseJob(jil);
+            if (job == null)
+                continue;
+
+            jobs.add(job);
+        }
 
         return jobs;
     }
@@ -40,6 +45,9 @@ public final class JobParserImpl implements JobParser {
 
             properties.put(matcher.group(1), matcher.group(2));
         }
+
+        if (properties.size() == 0)
+            return null;
 
         return new Job(properties);
     }
