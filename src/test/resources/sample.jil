@@ -1,0 +1,22 @@
+insert_job: template job_type: c
+box_name: box1
+command: ls -l
+machine: localhost
+owner: lyota01@TANT-A01
+permission: gx,ge,wx,we,mx,me
+date_conditions: 1
+days_of_week: all
+start_times: "15:00, 14:00"
+run_window: "14:00 - 6:00"
+condition: s(job1)
+description: "description field"
+n_retrys: 12
+term_run_time: 60
+box_terminator: 1
+job_terminator: 1
+std_out_file: /tmp/std_out
+std_err_file: /tmp/std_err
+min_run_alarm: 5
+max_run_alarm: 10
+alarm_if_fail: 1
+profile: /tmp/.profile

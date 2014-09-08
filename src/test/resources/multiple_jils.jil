@@ -1,0 +1,1411 @@
+/* ----------------- C_1CRW_DB_LOAD_MAIN_BOX ----------------- */
+
+insert_job: C_1CRW_DB_LOAD_MAIN_BOX job_type: b
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "00:05"
+description: "Box to kick off jobs to load OpsCredit data"
+term_run_time: 1200
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDUNCOVOPTD ----------------- */
+
+insert_job: C_1CRW_DF_BDUNCOVOPTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDUNCVOPTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BDUNCVOPTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDVARDISRPTD ----------------- */
+
+insert_job: C_1CRW_DF_BDVARDISRPTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDVARDISRPTD.TXT.LOAD"
+watch_file: /ftp-home/opdbxusr/ndm/BDVARDISRPTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDPRVDISRPTD ----------------- */
+
+insert_job: C_1CRW_DF_BDPRVDISRPTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDPRVDISRPTD.TXT.LOAD"
+watch_file: /ftp-home/opdbxusr/ndm/BDPRVDISRPTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDGNACTDSTD ----------------- */
+
+insert_job: C_1CRW_DF_BDGNACTDSTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDGNACTDSTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BDGNACTDSTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDQPACTDSTD ----------------- */
+
+insert_job: C_1CRW_DF_BDQPACTDSTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDQPACTDSTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BDQPACTDSTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_MRGN_EQTY_CALL_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_MRGN_EQTY_CALL_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Margin Equity into the CRW_MRGN_EQTY_CALLS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_TFR_AM_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_TFR_AM_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "00:30"
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Account Transfers (ACATS) from OD_ACCT_TFR into CRW_ACCT_TFR in the AM"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_TFR_PM_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_TFR_PM_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "13:00"
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Account Transfers (ACATS) from OD_ACCT_TFR into CRW_ACCT_TFR in the PM"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_NO_MRGN_AGREE_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_NO_MRGN_AGREE_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load No Margin into the CRW_NO_MRGN table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_DSTN_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_DSTN_IMP job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BDGNACTDSTD) & SUCCESS(C_1CRW_DF_BDQPACTDSTD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Import Account Distributions file into the CRW_ACCT_DSTNS table via SQL*Loader."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_CLSD_ACCT_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_CLSD_ACCT_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Closed Accounts into the CRW_CLSD_ACCT table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTV_VLTN_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_ACTV_VLTN_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Activity Violations into the CRW_ACTV_VLTN_WRKNG table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_UNCOV_OPT_LOAD_BSNS ----------------- */
+
+insert_job: C_1CRW_DC_UNCOV_OPT_LOAD_BSNS job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BDUNCOVOPTD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Uncovered Options business tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_DEBITS_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_DEBITS_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Debits business tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_BORD_RSTR_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_BORD_RSTR_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load BORD Restrictions from OD_ACCT_TRD_RSTRT into CRW_ACCT_TRD_RSTR"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_GUARANTEED_BAL_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_GUARANTEED_BAL_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Guaranteed Accounts into the CRW_GURE_BALS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_RISK_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_RISK_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_USR_ACCT)
+description: "Load the Risk business tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTION_ITEMS_MD ----------------- */
+
+insert_job: C_1CRW_DC_ACTION_ITEMS_MD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACCT_DSTN_IMP)
+description: "Create Action Item MD01 Account Dist"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTION_ITEMS_PD ----------------- */
+
+insert_job: C_1CRW_DC_ACTION_ITEMS_PD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACCT_DSTN_PREV_IMP)
+description: "Create Action Item PD01 CRW_ACCT_DIST_PREV"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_DSTN_PREV_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_DSTN_PREV_IMP job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BDPRVDISRPTD) & SUCCESS(C_1CRW_DF_BDVARDISRPTD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Loads the distribution preview business area."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+
+/* ----------------- C_1CRW_DF_BDUNCOVOPTD ----------------- */
+
+insert_job: C_1CRW_DF_BDUNCOVOPTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDUNCVOPTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BDUNCVOPTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDVARDISRPTD ----------------- */
+
+insert_job: C_1CRW_DF_BDVARDISRPTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDVARDISRPTD.TXT.LOAD"
+watch_file: /ftp-home/opdbxusr/ndm/BDVARDISRPTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDPRVDISRPTD ----------------- */
+
+insert_job: C_1CRW_DF_BDPRVDISRPTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDPRVDISRPTD.TXT.LOAD"
+watch_file: /ftp-home/opdbxusr/ndm/BDPRVDISRPTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDGNACTDSTD ----------------- */
+
+insert_job: C_1CRW_DF_BDGNACTDSTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDGNACTDSTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BDGNACTDSTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BDQPACTDSTD ----------------- */
+
+insert_job: C_1CRW_DF_BDQPACTDSTD job_type: f
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BDQPACTDSTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BDQPACTDSTD.TXT.LOAD
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_MRGN_EQTY_CALL_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_MRGN_EQTY_CALL_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Margin Equity into the CRW_MRGN_EQTY_CALLS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_TFR_AM_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_TFR_AM_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "00:30"
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Account Transfers (ACATS) from OD_ACCT_TFR into CRW_ACCT_TFR in the AM"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_TFR_PM_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_TFR_PM_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "13:00"
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Account Transfers (ACATS) from OD_ACCT_TFR into CRW_ACCT_TFR in the PM"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_NO_MRGN_AGREE_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_NO_MRGN_AGREE_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load No Margin into the CRW_NO_MRGN table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_DSTN_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_DSTN_IMP job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BDGNACTDSTD) & SUCCESS(C_1CRW_DF_BDQPACTDSTD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Import Account Distributions file into the CRW_ACCT_DSTNS table via SQL*Loader."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_CLSD_ACCT_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_CLSD_ACCT_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Closed Accounts into the CRW_CLSD_ACCT table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTV_VLTN_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_ACTV_VLTN_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Activity Violations into the CRW_ACTV_VLTN_WRKNG table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_UNCOV_OPT_LOAD_BSNS ----------------- */
+
+insert_job: C_1CRW_DC_UNCOV_OPT_LOAD_BSNS job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BDUNCOVOPTD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Uncovered Options business tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_DEBITS_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_DEBITS_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Debits business tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_BORD_RSTR_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_BORD_RSTR_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load BORD Restrictions from OD_ACCT_TRD_RSTRT into CRW_ACCT_TRD_RSTR"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_GUARANTEED_BAL_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_GUARANTEED_BAL_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Guaranteed Accounts into the CRW_GURE_BALS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_RISK_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_RISK_LOAD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_USR_ACCT)
+description: "Load the Risk business tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTION_ITEMS_MD ----------------- */
+
+insert_job: C_1CRW_DC_ACTION_ITEMS_MD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACCT_DSTN_IMP)
+description: "Create Action Item MD01 Account Dist"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTION_ITEMS_PD ----------------- */
+
+insert_job: C_1CRW_DC_ACTION_ITEMS_PD job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACCT_DSTN_PREV_IMP)
+description: "Create Action Item PD01 CRW_ACCT_DIST_PREV"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACCT_DSTN_PREV_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ACCT_DSTN_PREV_IMP job_type: c
+box_name: C_1CRW_DB_LOAD_MAIN_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BDPRVDISRPTD) & SUCCESS(C_1CRW_DF_BDVARDISRPTD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Loads the distribution preview business area."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_WIRE_IMP ----------------- */
+
+insert_job: C_1CRW_DC_WIRE_IMP job_type: c
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu,we,th,fr,sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_mins: 00,05,10,15,20,25,30,35,40,45,50,55
+run_window: "07:00 - 19:00"
+condition: SUCCESS(C_1CRW_DF_BDWIRD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load the CRW_WIRE table via SQL*Loader."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DF_BDWIRD ----------------- */
+
+insert_job: C_1CRW_DF_BDWIRD job_type: f
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+date_conditions: 1
+days_of_week: tu,we,th,fr,sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_mins: 00,05,10,15,20,25,30,35,40,45,50,55
+run_window: "07:00 - 19:00"
+description: "Watches for BDWIRD.txt file"
+watch_file: /ftp-home/opdbxusr/ndm/BDWIRD.TXT.load
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DB_ARCH_BOX ----------------- */
+
+insert_job: C_1CRW_DB_ARCH_BOX job_type: b
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "00:05"
+description: "Box to kick off Arch and Arch dependant jobs"
+term_run_time: 1200
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BSARCD ----------------- */
+
+insert_job: C_1CRW_DF_BSARCD job_type: f
+box_name: C_1CRW_DB_ARCH_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BSARCD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BSARCD.TXT.load
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BSARCHMTD ----------------- */
+
+insert_job: C_1CRW_DF_BSARCHMTD job_type: f
+box_name: C_1CRW_DB_ARCH_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BSARCHMTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BSARCHMTD.TXT.load
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_EXTD_STLM_TRDS_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_EXTD_STLM_TRDS_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Extended Settlement Trades into the CRW_EXTDD_STLM_TRDS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_STCK_DUE_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_STCK_DUE_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ARCH_IMP)
+description: "Load Stock Due from ODS"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_RGLY_SHRT_LOAD_BSNS ----------------- */
+
+insert_job: C_1CRW_DC_RGLY_SHRT_LOAD_BSNS job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_STCK_DUE_LOAD) & SUCCESS(C_1CRW_DC_CASH_LOAD_BSNS)
+description: "Load Regulatory Shorts into the CRW_RGLY_SHRTS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ARCH_STK_SHRT_SUM ----------------- */
+
+insert_job: C_1CRW_DC_ARCH_STK_SHRT_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_RGLY_SHRT_LOAD_BSNS) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Summary for arch Regulatory shorts and Stock due"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_LOCAL_MRGN_CALL_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_LOCAL_MRGN_CALL_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CASH_LOAD_BSNS)
+description: "Load Local Margin Calls"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ARCH_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ARCH_IMP job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BSARCD) & SUCCESS(C_1CRW_DF_BSARCHMTD)
+description: "Import ARCH files BSARCD.TXT and BSARCHMTD.TXT into CRW_CORE_ARCH and CRW_CORE_ARCH_HMT tables via SQL*Loader."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_CASH_LOAD_BSNS ----------------- */
+
+insert_job: C_1CRW_DC_CASH_LOAD_BSNS job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ARCH_IMP)
+description: "Load ARCH and CASH business tables used for the cash credit web screens."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_MRGN_EXCP_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_MRGN_EXCP_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_LOCAL_MRGN_CALL_LOAD)
+description: "Load Margin Exceptions into the CRW_MRGN_EXCP table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_MRGN_EXCP_SUM ----------------- */
+
+insert_job: C_1CRW_DC_MRGN_EXCP_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_MRGN_EXCP_LOAD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Margin Exceptions into the CRW_MRGN_EXCP table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_RGLY_EXTD_STLM_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_RGLY_EXTD_STLM_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_EXTD_STLM_TRDS_LOAD) & SUCCESS(C_1CRW_DC_CASH_LOAD_BSNS) & SUCCESS(C_1CRW_DC_EXTD_STLM_TRDS_LOAD)
+description: "Load Regulatory Extended Settlements into the CRW_EXTDD_STLM_TRDS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_DAY_TRDS_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_DAY_TRDS_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_LOCAL_MRGN_CALL_LOAD)
+description: "Load Day Trades into the day trade tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_STLMT_SUM ----------------- */
+
+insert_job: C_1CRW_DC_STLMT_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_RGLY_EXTD_STLM_LOAD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Settlement summary."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_CASH_LOAD_BSNS_SUM ----------------- */
+
+insert_job: C_1CRW_DC_CASH_LOAD_BSNS_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_DAY_TRDS_LOAD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Margin Exceptions into the CRW_MRGN_EXCP table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+
+/* ----------------- C_1CRW_DF_BSARCD ----------------- */
+
+insert_job: C_1CRW_DF_BSARCD job_type: f
+box_name: C_1CRW_DB_ARCH_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BSARCD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BSARCD.TXT.load
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DF_BSARCHMTD ----------------- */
+
+insert_job: C_1CRW_DF_BSARCHMTD job_type: f
+box_name: C_1CRW_DB_ARCH_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for BSARCHMTD.TXT file"
+watch_file: /ftp-home/opdbxusr/ndm/BSARCHMTD.TXT.load
+watch_interval: 60
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_EXTD_STLM_TRDS_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_EXTD_STLM_TRDS_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Extended Settlement Trades into the CRW_EXTDD_STLM_TRDS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_STCK_DUE_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_STCK_DUE_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ARCH_IMP)
+description: "Load Stock Due from ODS"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_RGLY_SHRT_LOAD_BSNS ----------------- */
+
+insert_job: C_1CRW_DC_RGLY_SHRT_LOAD_BSNS job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_STCK_DUE_LOAD) & SUCCESS(C_1CRW_DC_CASH_LOAD_BSNS)
+description: "Load Regulatory Shorts into the CRW_RGLY_SHRTS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ARCH_STK_SHRT_SUM ----------------- */
+
+insert_job: C_1CRW_DC_ARCH_STK_SHRT_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_RGLY_SHRT_LOAD_BSNS) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Summary for arch Regulatory shorts and Stock due"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_LOCAL_MRGN_CALL_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_LOCAL_MRGN_CALL_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CASH_LOAD_BSNS)
+description: "Load Local Margin Calls"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ARCH_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ARCH_IMP job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_BSARCD) & SUCCESS(C_1CRW_DF_BSARCHMTD)
+description: "Import ARCH files BSARCD.TXT and BSARCHMTD.TXT into CRW_CORE_ARCH and CRW_CORE_ARCH_HMT tables via SQL*Loader."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_CASH_LOAD_BSNS ----------------- */
+
+insert_job: C_1CRW_DC_CASH_LOAD_BSNS job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ARCH_IMP)
+description: "Load ARCH and CASH business tables used for the cash credit web screens."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_MRGN_EXCP_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_MRGN_EXCP_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_LOCAL_MRGN_CALL_LOAD)
+description: "Load Margin Exceptions into the CRW_MRGN_EXCP table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_MRGN_EXCP_SUM ----------------- */
+
+insert_job: C_1CRW_DC_MRGN_EXCP_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_MRGN_EXCP_LOAD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Margin Exceptions into the CRW_MRGN_EXCP table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_RGLY_EXTD_STLM_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_RGLY_EXTD_STLM_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_EXTD_STLM_TRDS_LOAD) & SUCCESS(C_1CRW_DC_CASH_LOAD_BSNS) & SUCCESS(C_1CRW_DC_EXTD_STLM_TRDS_LOAD)
+description: "Load Regulatory Extended Settlements into the CRW_EXTDD_STLM_TRDS table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_DAY_TRDS_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_DAY_TRDS_LOAD job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_LOCAL_MRGN_CALL_LOAD)
+description: "Load Day Trades into the day trade tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_STLMT_SUM ----------------- */
+
+insert_job: C_1CRW_DC_STLMT_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_RGLY_EXTD_STLM_LOAD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Settlement summary."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_CASH_LOAD_BSNS_SUM ----------------- */
+
+insert_job: C_1CRW_DC_CASH_LOAD_BSNS_SUM job_type: c
+box_name: C_1CRW_DB_ARCH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_DAY_TRDS_LOAD) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load Margin Exceptions into the CRW_MRGN_EXCP table."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DB_PRE_LOAD_BOX ----------------- */
+
+insert_job: C_1CRW_DB_PRE_LOAD_BOX job_type: b
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "00:05"
+description: "Box to kick off pre load jobs"
+term_run_time: 1200
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_CAD_BR_HIER_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_CAD_BR_HIER_LOAD job_type: c
+box_name: C_1CRW_DB_PRE_LOAD_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_BATCH_PREP)
+description: "Load the hierarchy tables into CAD from OD data"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_USR_ACCT ----------------- */
+
+insert_job: C_1CRW_DC_USR_ACCT job_type: c
+box_name: C_1CRW_DB_PRE_LOAD_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load tables from user entered table data"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_BATCH_PREP ----------------- */
+
+insert_job: C_1CRW_DC_BATCH_PREP job_type: c
+box_name: C_1CRW_DB_PRE_LOAD_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+description: "Perform truncation if previous runs of the day"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+
+/* ----------------- C_1CRW_DC_CAD_BR_HIER_LOAD ----------------- */
+
+insert_job: C_1CRW_DC_CAD_BR_HIER_LOAD job_type: c
+box_name: C_1CRW_DB_PRE_LOAD_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_BATCH_PREP)
+description: "Load the hierarchy tables into CAD from OD data"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_USR_ACCT ----------------- */
+
+insert_job: C_1CRW_DC_USR_ACCT job_type: c
+box_name: C_1CRW_DB_PRE_LOAD_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Load tables from user entered table data"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_BATCH_PREP ----------------- */
+
+insert_job: C_1CRW_DC_BATCH_PREP job_type: c
+box_name: C_1CRW_DB_PRE_LOAD_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+description: "Perform truncation if previous runs of the day"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DB_ACH_BOX ----------------- */
+
+insert_job: C_1CRW_DB_ACH_BOX job_type: b
+#owner: bpautosys@xtch
+permission: gx
+date_conditions: 1
+days_of_week: tu, we, th, fr, sa
+exclude_calendar: CORP_DAY_AFTER_NYSE_HOLIDAYS
+start_times: "00:05"
+description: "Box to kick off jobs to load OpsCredit data"
+term_run_time: 1200
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_ACH_REJECTS_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ACH_REJECTS_IMP job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_ACHREJECTS) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Import ACH rejects file wschd.achrejects.txt into rejects tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DF_ACHREJECTS ----------------- */
+
+insert_job: C_1CRW_DF_ACHREJECTS job_type: f
+box_name: C_1CRW_DB_ACH_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for wschd.achrejects.txt file"
+watch_file: /ftp-home/opdbxusr/ndm/wschd.achrejects.txt.load
+watch_interval: 60
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACH_REJECTS_GLEN ----------------- */
+
+insert_job: C_1CRW_DC_ACH_REJECTS_GLEN job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACH_REJECTS_IMP)
+description: "Add reject amounts to GLEN"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACH_REJECTS_BETA ----------------- */
+
+insert_job: C_1CRW_DC_ACH_REJECTS_BETA job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACH_REJECTS_IMP)
+description: "Proccess BETA for action Items."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTION_ITEMS_AR ----------------- */
+
+insert_job: C_1CRW_DC_ACTION_ITEMS_AR job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACH_REJECTS_IMP)
+description: "Create Action Item AR01 ACH Rejects."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+
+/* ----------------- C_1CRW_DC_ACH_REJECTS_IMP ----------------- */
+
+insert_job: C_1CRW_DC_ACH_REJECTS_IMP job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DF_ACHREJECTS) & SUCCESS(C_1CRW_DC_CAD_BR_HIER_LOAD)
+description: "Import ACH rejects file wschd.achrejects.txt into rejects tables."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DF_ACHREJECTS ----------------- */
+
+insert_job: C_1CRW_DF_ACHREJECTS job_type: f
+box_name: C_1CRW_DB_ACH_BOX
+machine: bpacw011
+#owner: opdbxusr
+permission: gx
+description: "Watches for wschd.achrejects.txt file"
+watch_file: /ftp-home/opdbxusr/ndm/wschd.achrejects.txt.load
+watch_interval: 60
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACH_REJECTS_GLEN ----------------- */
+
+insert_job: C_1CRW_DC_ACH_REJECTS_GLEN job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACH_REJECTS_IMP)
+description: "Add reject amounts to GLEN"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACH_REJECTS_BETA ----------------- */
+
+insert_job: C_1CRW_DC_ACH_REJECTS_BETA job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACH_REJECTS_IMP)
+description: "Proccess BETA for action Items."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_ACTION_ITEMS_AR ----------------- */
+
+insert_job: C_1CRW_DC_ACTION_ITEMS_AR job_type: c
+box_name: C_1CRW_DB_ACH_BOX
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+condition: SUCCESS(C_1CRW_DC_ACH_REJECTS_IMP)
+description: "Create Action Item AR01 ACH Rejects."
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_BATCH_SEED ----------------- */
+
+insert_job: C_1CRW_DC_BATCH_SEED job_type: c
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+description: "Run the batch seed program for user entered data"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 1
+
+
+/* ----------------- C_1CRW_DC_GET_LOGS ----------------- */
+
+insert_job: C_1CRW_DC_GET_LOGS job_type: c
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+description: "Get Log files"
+std_out_file: d\:\autosys\logs\%AUTO_JOB_NAME%.out
+std_err_file: d\:\autosys\logs\%AUTO_JOB_NAME%.err
+alarm_if_fail: 0
+
+
+/* ----------------- C_1CRW_DC_BL_SERVER_PING ----------------- */
+
+insert_job: C_1CRW_DC_BL_SERVER_PING job_type: c
+command: D\:\AutoSys\OpsCreditBatch\OpsCreditBatch.exe %AUTO_JOB_NAME%
+machine: ncweczapp034
+#owner: bpautosys@xtch
+permission: gx
+description: "Do the Ping"
+alarm_if_fail: 0
