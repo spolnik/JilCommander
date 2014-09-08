@@ -1,5 +1,7 @@
 package com.wordpress.nprogramming;
 
+import java.util.List;
+
 public interface JobParser {
-    Job parse(String jil);
+    List<Job> parse(String jil);
 }

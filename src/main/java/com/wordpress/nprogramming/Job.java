@@ -26,11 +26,12 @@ public final class Job {
         StringBuilder jil = new StringBuilder();
 
         jil.append("/* ---------- ").append(getJobName()).append(" ---------- */\n\n");
-        jil.append("insert_job: ").append(getJobName()).append("\n");
+        jil.append("insert_job: ").append(getJobName()).append(" job_type: ")
+                .append(getJobType().getRawValue()).append("\n");
 
         for (String key : properties.keySet())
         {
-            if ("insert_job".equals(key.toLowerCase()))
+            if ("insert_job".equals(key.toLowerCase()) || "job_type".equals(key.toLowerCase()))
                 continue;
 
             jil.append(key).append(": ").append(getProperty(key)).append("\n");

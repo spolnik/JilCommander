@@ -1,6 +1,8 @@
 package com.wordpress.nprogramming;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,10 +12,22 @@ public final class JobParserImpl implements JobParser {
     private static final Pattern JIL_REGEX = Pattern.compile("^([A-Za-z-_]+):\\s*(.*)$");
 
     @Override
-    public Job parse(String jil) {
-        String newJil = jil.replaceFirst("job_type:", "\njob_type:");
+    public List<Job> parse(String input) {
+        String newJil = input.replaceFirst("job_type:", "\njob_type:");
 
-        final String[] jilLines = newJil.split("\n");
+        final String[] jils = newJil.split("(?=insert_job:)");
+
+        List<Job> jobs = new ArrayList<>();
+        for (String jil : jils)
+            jobs.add(parseJob(jil));
+
+        return jobs;
+    }
+
+    private Job parseJob(String jil) {
+
+        final String[] jilLines = jil.split("\n");
+
         Map<String,String> properties = new HashMap<>();
 
         for (String rawLine : jilLines) {

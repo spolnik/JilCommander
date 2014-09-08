@@ -11,6 +11,10 @@ public enum JobType {
         this.rawValue = rawValue;
     }
 
+    public String getRawValue() {
+        return this.rawValue;
+    }
+
     public static JobType fromString(String text) {
         if (text != null) {
             for (JobType type : JobType.values()) {

@@ -23,7 +23,7 @@ public class Test_Parsing_Simple_Jil {
     @Test
     public void test_parsing_simple_jil_by_passing_path() throws Exception {
         final JobParser jobParser = new JobParserImpl();
-        Job job = jobParser.parse(jil);
+        Job job = jobParser.parse(jil).get(0);
 
         assertThat(job.getJobName(), is("template"));
         assertThat(job.getJobType(), is(JobType.COMMAND));
