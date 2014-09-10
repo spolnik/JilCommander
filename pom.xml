@@ -25,6 +25,11 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -41,7 +46,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.wordpress.nprogramming.JilCommander</mainClass>
+                            <mainClass>com.wordpress.nprogramming.JilCommanderApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

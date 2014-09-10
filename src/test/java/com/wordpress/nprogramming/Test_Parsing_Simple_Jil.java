@@ -1,5 +1,9 @@
 package com.wordpress.nprogramming;
 
+import com.wordpress.nprogramming.domain.Job;
+import com.wordpress.nprogramming.domain.JobType;
+import com.wordpress.nprogramming.parsing.JobParser;
+import com.wordpress.nprogramming.parsing.JobParserImpl;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,6 @@
-package com.wordpress.nprogramming;
+package com.wordpress.nprogramming.parsing;
+
+import com.wordpress.nprogramming.domain.Job;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +15,12 @@ public final class JobParserImpl implements JobParser {
 
     @Override
     public List<Job> parse(String input) {
-        String newJil = input.replaceAll("job_type:", "\njob_type:");
 
+        final String newJil = input.replaceAll("job_type:", "\njob_type:");
         final String[] jils = newJil.split("(?=insert_job:)");
 
         List<Job> jobs = new ArrayList<>();
+
         for (String jil : jils) {
             final Job job = parseJob(jil);
             if (job == null)
@@ -31,17 +34,15 @@ public final class JobParserImpl implements JobParser {
 
     private Job parseJob(String jil) {
 
-        final String[] jilLines = jil.split("\n");
-
-        Map<String,String> properties = new HashMap<>();
+        final String[] jilLines = jil.split("\r?\n");
+        final Map<String,String> properties = new HashMap<>();
 
         for (String rawLine : jilLines) {
-            String line = rawLine.trim();
+            final String line = rawLine.trim();
             final Matcher matcher = JIL_REGEX.matcher(line);
 
-            if (!matcher.find()) {
+            if (!matcher.find())
                 continue;
-            }
 
             properties.put(matcher.group(1), matcher.group(2));
         }
